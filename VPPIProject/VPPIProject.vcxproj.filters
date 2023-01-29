@@ -2,5 +2,22 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Notes.cpp">
+      <Filter>Notes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Unneeded.h" />
+    <ClInclude Include="INote.h">
+      <Filter>Notes</Filter>
+    </ClInclude>
+    <ClInclude Include="Notes.h">
+      <Filter>Notes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Notes">
+      <UniqueIdentifier>{c3a30d2a-0ac7-4b0c-9eef-a0ab7f760f82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
