@@ -1,6 +1,5 @@
 #include "Notes.h"
 #include <math.h>
-#define HALF_TONE 1.059463094359
 
 NOTE_DEFINITION(NoteA)
 NOTE_DEFINITION(NoteASharp)

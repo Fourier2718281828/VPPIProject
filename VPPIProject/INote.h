@@ -40,7 +40,7 @@ CLASS_NAME::CLASS_NAME(const octava_shift_t s) :				\
 																\
 auto CLASS_NAME::get_frequency() const noexcept -> frequency_t	\
 {																\
-	return FREQUENCY * pow(HALF_TONE, octava_shift_);			\
+	return FREQUENCY * pow(2, octava_shift_);					\
 }				
 
 #endif // !INOTE_				
