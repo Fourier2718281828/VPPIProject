@@ -144,7 +144,7 @@
     <ClCompile Include="ConsoleDocumentEditor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathTextDocument.cpp" />
-    <ClCompile Include="Notes.cpp" />
+    <ClCompile Include="MathTextHeader.cpp" />
     <ClCompile Include="PlainTextDocument.cpp" />
     <ClCompile Include="TextHeader.cpp" />
   </ItemGroup>
@@ -154,12 +154,12 @@
     <ClInclude Include="ConcreteFactories.h" />
     <ClInclude Include="ConsoleDocumentEditor.h" />
     <ClInclude Include="BadDocumentException.h" />
+    <ClInclude Include="MathTextHeader.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="IDocument.h" />
     <ClInclude Include="IHeader.h" />
-    <ClInclude Include="INote.h" />
     <ClInclude Include="InvalidCastException.h" />
     <ClInclude Include="MathTextDocument.h" />
-    <ClInclude Include="Notes.h" />
     <ClInclude Include="PlainTextDocument.h" />
     <ClInclude Include="IFactories.h" />
     <ClInclude Include="TextHeader.h" />

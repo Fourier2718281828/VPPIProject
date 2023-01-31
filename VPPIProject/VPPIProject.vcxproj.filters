@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Notes.cpp">
-      <Filter>Notes</Filter>
-    </ClCompile>
     <ClCompile Include="PlainTextDocument.cpp">
       <Filter>Product\Documents</Filter>
     </ClCompile>
@@ -15,15 +12,12 @@
       <Filter>Product\Headers</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleDocumentEditor.cpp" />
+    <ClCompile Include="MathTextHeader.cpp">
+      <Filter>Product\Headers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Unneeded.h" />
-    <ClInclude Include="INote.h">
-      <Filter>Notes</Filter>
-    </ClInclude>
-    <ClInclude Include="Notes.h">
-      <Filter>Notes</Filter>
-    </ClInclude>
     <ClInclude Include="IDocument.h">
       <Filter>Product\Documents</Filter>
     </ClInclude>
@@ -57,11 +51,12 @@
     <ClInclude Include="InvalidCastException.h">
       <Filter>Exceptions</Filter>
     </ClInclude>
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="MathTextHeader.h">
+      <Filter>Product\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Notes">
-      <UniqueIdentifier>{c3a30d2a-0ac7-4b0c-9eef-a0ab7f760f82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Product">
       <UniqueIdentifier>{93d53e85-b641-4036-98c4-c18fcc20ce93}</UniqueIdentifier>
     </Filter>

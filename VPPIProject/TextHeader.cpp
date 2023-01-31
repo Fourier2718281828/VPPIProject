@@ -1,43 +1,46 @@
 #include "TextHeader.h"
-#include <iostream>
+#include "CommandException.h"
 
-void insert_text(const IDocument&, const IHeader::text_type&)
+#define ATTACH_METHOD(method_name) \
+std::bind(&TextHeader::method_name, this, std::placeholders::_1, std::placeholders::_2)
+
+TextHeader::TextHeader() :
+	commands_
 {
-	std::cout << "insert_text called" << '\n';
+	{"insert_text", ATTACH_METHOD(insert_text)},
+	{"clear", ATTACH_METHOD(clear)},
 }
-
-void remove_last_word(const IDocument&) noexcept
 {
-	std::cout << "remove_last_word called" << '\n';
 }
-
-void clear_document(const IDocument&) noexcept
-{
-	std::cout << "clear_document called" << '\n';
-}
-
-const TextHeader::input_ops_container_type TextHeader::s_INPUT_OPERATIONS =
-{
-	{"Insert text", static_cast<TextHeader::input_operation_type>(insert_text)},
-};
-
-const TextHeader::procedures_container_type TextHeader::s_PROCEDURES =
-{
-	{"Remove last word", static_cast<IHeader::procedure_type>(remove_last_word)},
-	{"Clear document", static_cast<IHeader::procedure_type>(clear_document)},
-};
 
 auto TextHeader::get_title() const noexcept -> const caption_txt_type
 {
 	return "Text Document Editor:";
 }
 
-auto TextHeader::get_input_operations() const noexcept -> const input_ops_container_type&
+auto TextHeader::get_commands() const noexcept -> const command_map&
 {
-	return s_INPUT_OPERATIONS;
+	return commands_;
 }
 
-auto TextHeader::get_procedures() const noexcept -> const procedures_container_type&
+auto TextHeader::insert_text
+(
+	IDocument& document, 
+	const iterable& params
+) const -> void
 {
-	return s_PROCEDURES;
+	if (params.size() != 1)
+		throw CommandException("***Invalid number of params");
+	document.append_text(params[0]);
+}
+
+auto TextHeader::clear
+(
+	IDocument& document, 
+	const iterable& params
+) const -> void
+{
+	if (params.size() != 0)
+		throw CommandException("***Invalid number of params");
+	document.clear();
 }

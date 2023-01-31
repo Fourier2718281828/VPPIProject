@@ -4,6 +4,7 @@
 #include "IHeader.h"
 #include "IDocument.h"
 #include "IFactories.h"
+#include "Singleton.h"
 #include <memory>
 #include <iostream>
 #include <map>
@@ -11,39 +12,46 @@
 #include <utility>
 #include <concepts>
 
-class ConsoleDocumentEditor : public Application
+class ConsoleDocumentEditor : 
+	public Application, 
+	public Singleton<ConsoleDocumentEditor>
 {
 private:
 	template<typename T>
 	using ptr = std::shared_ptr<T>;
 	using factory_type = IDocHeaderFactory;
-	using in_text_type = std::string;
-	using iterable = std::vector<in_text_type>;
-	using command = std::function<void(const iterable&)>;
-	using command_map = std::map<in_text_type, command>;
+	using text_type = std::string;
+	using iterable = IHeader::iterable; //std::vector<text_type>;
+	using command_type = std::function<void(const iterable&)>;
+	using command_map = std::map<text_type, command_type>;
 public:
-	ConsoleDocumentEditor(std::ostream&, std::istream&);
+	static_assert(std::is_same_v<text_type, IHeader::text_type>, 
+		"Text types must match.");
+public:
+	ConsoleDocumentEditor();
 	~ConsoleDocumentEditor() override = default;
 	int execute() const noexcept override;
 public:
 	template<typename FactoryType>
 		requires std::is_default_constructible_v<FactoryType>
-	static bool register_factory(const DocumentType);
+	bool register_factory(const DocumentType);
 public:
 	ConsoleDocumentEditor(const ConsoleDocumentEditor&) = delete;
 	ConsoleDocumentEditor& operator=(const ConsoleDocumentEditor&) = delete;
 public:
 	void print_help(const iterable&) const;
-	void new_document(const iterable&) const;
-	void open_document(const iterable&) const;
-	void close_document(const iterable&) const;
+	void new_document(const iterable&);
+	void open_document(const iterable&);
+	void close_document(const iterable&);
 private:
 	void main_loop() const noexcept;
-	const std::pair<in_text_type, iterable> parse_user_command(const in_text_type&) const noexcept;
+	const std::pair<text_type, iterable> parse_user_command(const text_type&) const noexcept;
+	ptr<factory_type> get_factory(const text_type&) const;
 	void command_params_check(const unsigned short, const unsigned short) const;
-	//void show_document()
-	static in_text_type doctype_to_string(const DocumentType);
+	void show_document(ptr<factory_type>) noexcept;
+	static text_type doctype_to_string(const DocumentType);
 private:
+	std::map<text_type, ptr<factory_type>> doctypes_to_factories_;
 	const command_map commands_;
 	std::ostream& output_;
 	std::istream& input_;
@@ -53,17 +61,19 @@ private:
 private:
 	static const char* const s_APP_BORDER;
 	static const char* const s_DOC_BORDER;
+	static const char* const s_DOC_IN_BORDER;
 	static const char* const s_DEFAULT_FILENAME;
-	static std::map<in_text_type, ptr<factory_type>> s_DOCUMENT_TYPES_TO_FACTORIES;
 };
 
 template<typename FactoryType>
 	requires std::is_default_constructible_v<FactoryType>
-inline static bool ConsoleDocumentEditor::register_factory(const DocumentType doc_type)
+inline bool ConsoleDocumentEditor::register_factory(const DocumentType doc_type)
 {
 	auto param_name = doctype_to_string(doc_type);
+	if (doctypes_to_factories_.contains(param_name))
+		throw std::runtime_error("***Factory of such a doctype has already been registered");
 	auto factory_ptr = std::make_shared<FactoryType>();
-	auto [_, result] = s_DOCUMENT_TYPES_TO_FACTORIES.insert({ param_name , factory_ptr });
+	auto [_, result] = doctypes_to_factories_.insert({ param_name , factory_ptr });
 	return result;
 }
 

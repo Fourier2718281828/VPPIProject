@@ -1,20 +1,20 @@
-#ifndef TEXT_HEADER_
-#define TEXT_HEADER_
+#ifndef MATH_HEADER_
+#define MATH_HEADER_
 #include "IHeader.h"
 
-class TextHeader : public IHeader
+class MathTextHeader : public IHeader
 {
 public:
-	TextHeader();
-	~TextHeader() override = default;
+	MathTextHeader();
+	~MathTextHeader() override = default;
 public:
 	const caption_txt_type get_title() const noexcept override;
 	const command_map& get_commands() const noexcept override;
 private:
-	void insert_text(IDocument&, const iterable&) const;
+	void insert_formula(IDocument&, const iterable&) const;
 	void clear(IDocument&, const iterable&) const;
 private:
 	command_map commands_;
 };
 
-#endif // !TEXT_HEADER_
+#endif // !MATH_HEADER_

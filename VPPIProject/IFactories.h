@@ -18,7 +18,7 @@ public:
 	using abstract_product_ptr = std::unique_ptr<AbstractProduct>;
 public:
 	virtual ~IFactoryUnit() = default;
-private:
+public:
 	virtual abstract_product_ptr Create(Dispatcher<AbstractProduct>) const = 0;
 };
 
@@ -39,8 +39,8 @@ public:
 	template<typename AbstractProduct>
 	abstract_product_ptr<AbstractProduct> Create() const
 	{
-		Unit<AbstractProduct>& unit = *this;
-		return unit.DoCreate(Dispatcher<AbstractProduct>{});
+		const Unit<AbstractProduct>& unit = *this;
+		return unit.Create(Dispatcher<AbstractProduct>{});
 	}
 };
 

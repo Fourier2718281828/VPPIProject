@@ -17,7 +17,7 @@ protected:
 public:
 	using AbstractProduct = typename BaseProductList::Head;
 	using abstract_product_ptr = std::unique_ptr<AbstractProduct>;
-private:
+public:
 	abstract_product_ptr Create(Dispatcher<AbstractProduct>) const override
 	{
 		return std::make_unique<ConcreteProduct>();
@@ -71,9 +71,9 @@ namespace
 //#define PROTOTYPE_BASED_FACTORIES
 #ifndef PROTOTYPE_BASED_FACTORIES
 	const bool FactoryRegistrator::PLAIN_TEXT_FACTORY =
-		ConsoleDocumentEditor::register_factory<PlainTextFactory>(DocumentType::PLAIN_TEXT);
+		ConsoleDocumentEditor::get_instance().register_factory<PlainTextFactory>(DocumentType::PLAIN_TEXT);
 	const bool FactoryRegistrator::MATH_TEXT_FACTORY =
-		ConsoleDocumentEditor::register_factory<MathTextFactory>(DocumentType::MATH_TEXT);
+		ConsoleDocumentEditor::get_instance().register_factory<MathTextFactory>(DocumentType::MATH_TEXT);
 #else
 
 #endif // !PROTOTYPE_BASED_FACTORIES

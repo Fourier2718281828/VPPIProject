@@ -4,6 +4,6 @@
 
 auto main() -> int
 {
-	auto app = std::make_unique<ConsoleDocumentEditor>(std::cout, std::cin);
-	return app->execute();
+	decltype(auto) app = ConsoleDocumentEditor::get_instance();
+	return app.execute();
 }
