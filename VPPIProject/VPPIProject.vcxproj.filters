@@ -54,6 +54,9 @@
     <ClInclude Include="ConcreteFactories.h">
       <Filter>Factories</Filter>
     </ClInclude>
+    <ClInclude Include="InvalidCastException.h">
+      <Filter>Exceptions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Notes">

@@ -16,8 +16,9 @@ protected:
 	using ProductList = typename BaseProductList::Tail;
 public:
 	using AbstractProduct = typename BaseProductList::Head;
-public:
-	typename Base::abstract_product_ptr Create(Dispatcher<AbstractProduct>)
+	using abstract_product_ptr = std::unique_ptr<AbstractProduct>;
+private:
+	abstract_product_ptr Create(Dispatcher<AbstractProduct>) const override
 	{
 		return std::make_unique<ConcreteProduct>();
 	}
@@ -26,7 +27,7 @@ public:
 template
 <
 	typename AbstractFact,
-	typename ProductTypes,// = typename AbstractFact::ProductList
+	typename ProductTypes,
 	template <typename, typename> typename Unit = ConcreteFactoryUnit
 >
 class ConcreteFactory : 
@@ -52,8 +53,31 @@ using PlainTextFactory = ConcreteFactory
 using MathTextFactory = ConcreteFactory
 <
 	IDocHeaderFactory,
-	LOKI_TYPELIST_2(MathTextDocument, TextHeader), //TODO ADD MATH TEXT HEADER!!!
+	LOKI_TYPELIST_2(MathTextDocument, TextHeader),
 	ConcreteFactoryUnit
 >;
+
+#include "ConsoleDocumentEditor.h"
+namespace
+{
+
+	class FactoryRegistrator
+	{
+	private:
+		static const bool PLAIN_TEXT_FACTORY;
+		static const bool MATH_TEXT_FACTORY;
+	};
+
+//#define PROTOTYPE_BASED_FACTORIES
+#ifndef PROTOTYPE_BASED_FACTORIES
+	const bool FactoryRegistrator::PLAIN_TEXT_FACTORY =
+		ConsoleDocumentEditor::register_factory<PlainTextFactory>(DocumentType::PLAIN_TEXT);
+	const bool FactoryRegistrator::MATH_TEXT_FACTORY =
+		ConsoleDocumentEditor::register_factory<MathTextFactory>(DocumentType::MATH_TEXT);
+#else
+
+#endif // !PROTOTYPE_BASED_FACTORIES
+}
+
 
 #endif // !CONCRETE_FACTORIES_

@@ -2,10 +2,9 @@
 #include "Utilities.h"
 #include "CommandException.h"
 #include "ConcreteFactories.h"
+#include "InvalidCastException.h"
 #include <type_traits>
 #include <memory>
-
-//#define WITH_ALLOCATORS
 
 #define ATTACH_METHOD(method_name) \
 std::bind(&ConsoleDocumentEditor::method_name, this, std::placeholders::_1)
@@ -21,14 +20,7 @@ std::map
 	ConsoleDocumentEditor::in_text_type,
 	ConsoleDocumentEditor::ptr<ConsoleDocumentEditor::factory_type>
 >
-ConsoleDocumentEditor::s_DOCUMENT_TYPES_TO_FACTORIES
-{
-#ifndef WITH_ALLOCATORS
-	//{"plainText", MAKE_FACTORY(PlainTextFactory)},
-#else
-	
-#endif
-};
+ConsoleDocumentEditor::s_DOCUMENT_TYPES_TO_FACTORIES{};
 
 ConsoleDocumentEditor::ConsoleDocumentEditor
 (
@@ -39,7 +31,8 @@ ConsoleDocumentEditor::ConsoleDocumentEditor
 	(
 		{
 			{"?", ATTACH_METHOD(print_help)},
-			{"??", ATTACH_METHOD(print_help)},
+			{"new_document", ATTACH_METHOD(new_document)},
+			{"open_document", ATTACH_METHOD(open_document)},
 		}
 	),
 	output_(output),
@@ -50,7 +43,7 @@ ConsoleDocumentEditor::ConsoleDocumentEditor
 {
 }
 
-int ConsoleDocumentEditor::execute() const noexcept
+auto ConsoleDocumentEditor::execute() const noexcept -> int
 {
 	main_loop();
 	return 0;
@@ -74,6 +67,11 @@ auto ConsoleDocumentEditor::new_document(const iterable& params) const -> void
 		: s_DEFAULT_FILENAME;
 	//IDocHeaderFactory& f = *s_DOCUMENT_TYPES_TO_FACTORIES.at(params[0]);
 	
+}
+
+auto ConsoleDocumentEditor::open_document(const iterable& params) const -> void
+{
+	command_params_check(1, params.size());
 }
 
 auto ConsoleDocumentEditor::main_loop() const noexcept -> void
@@ -106,7 +104,7 @@ auto ConsoleDocumentEditor::main_loop() const noexcept -> void
 	output_ << s_APP_BORDER;
 }
 
-auto ConsoleDocumentEditor::parse_user_command(const in_text_type& input) 
+auto ConsoleDocumentEditor::parse_user_command(const in_text_type& input)
 const noexcept -> const std::pair<in_text_type, iterable>
 {
 	auto delims = " ";
@@ -125,4 +123,17 @@ auto ConsoleDocumentEditor::command_params_check
 {
 	if (needed_num_of_args != actual_num_of_args)
 		throw CommandException("***Invalid number of params");
+}
+
+auto ConsoleDocumentEditor::doctype_to_string(const DocumentType doc) -> in_text_type
+{
+	switch (doc)
+	{
+	case DocumentType::PLAIN_TEXT:
+		return "plain_text";
+	case DocumentType::MATH_TEXT:
+		return "math_text";
+	default:
+		throw InvalidCastException("No such a document type.");
+	}
 }

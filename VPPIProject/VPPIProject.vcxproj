@@ -157,6 +157,7 @@
     <ClInclude Include="IDocument.h" />
     <ClInclude Include="IHeader.h" />
     <ClInclude Include="INote.h" />
+    <ClInclude Include="InvalidCastException.h" />
     <ClInclude Include="MathTextDocument.h" />
     <ClInclude Include="Notes.h" />
     <ClInclude Include="PlainTextDocument.h" />

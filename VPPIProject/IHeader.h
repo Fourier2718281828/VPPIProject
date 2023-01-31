@@ -1,7 +1,7 @@
 #ifndef IHEADER_
 #define IHEADER_
 #include <string>
-#include <vector>
+#include <map>
 #include <utility>
 #include <functional>
 #include "IDocument.h"
@@ -14,8 +14,8 @@ public:
 	using input_operation_type = 
 		std::function<void(const IDocument&, const text_type&)>;
 	using procedure_type = std::function<void(const IDocument&)>;
-	using input_ops_container_type = std::vector<std::pair<caption_txt_type, input_operation_type>>;
-	using procedures_container_type = std::vector<std::pair<caption_txt_type, procedure_type>>;
+	using input_ops_container_type = std::map<caption_txt_type, input_operation_type>;
+	using procedures_container_type = std::map<caption_txt_type, procedure_type>;
 public:
 	virtual ~IHeader() = default;
 public:

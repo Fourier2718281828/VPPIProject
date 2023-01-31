@@ -2,6 +2,12 @@
 #define IDOCUMENT_
 #include <string>
 
+enum class DocumentType
+{
+	PLAIN_TEXT,
+	MATH_TEXT,
+};
+
 class IDocument
 {
 public:
