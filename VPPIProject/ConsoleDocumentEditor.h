@@ -1,5 +1,6 @@
-#ifndef APPLICATION_
-#define APPLICATION_
+#ifndef CONSOLE_DOC_EDITOR_
+#define CONSOLE_DOC_EDITOR_
+#include "Application.h"
 #include "IHeader.h"
 #include "IDocument.h"
 #include <memory>
@@ -8,7 +9,7 @@
 #include <functional>
 #include <utility>
 
-class ConsoleDocumentEditor
+class ConsoleDocumentEditor : public Application
 {
 private:
 	using in_text_type = std::string;
@@ -19,7 +20,8 @@ private:
 	using ptr = std::shared_ptr<T>;
 public:
 	ConsoleDocumentEditor(std::ostream&, std::istream&);
-	~ConsoleDocumentEditor() = default;
+	~ConsoleDocumentEditor() override = default;
+	int execute() const noexcept override;
 public:
 	ConsoleDocumentEditor(const ConsoleDocumentEditor&) = delete;
 	ConsoleDocumentEditor& operator=(const ConsoleDocumentEditor&) = delete;
@@ -43,5 +45,5 @@ private:
 	static const char* const s_DOC_BORDER;
 };
 
-#endif // !APPLICATION_
+#endif // !CONSOLE_DOC_EDITOR_
 

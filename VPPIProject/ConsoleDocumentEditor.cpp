@@ -6,8 +6,8 @@
 #define ATTACH_METHOD(method_name) \
 std::bind(&ConsoleDocumentEditor::method_name, this, std::placeholders::_1)
 
-const char* const ConsoleDocumentEditor::s_APP_BORDER = "###############################################";
-const char* const ConsoleDocumentEditor::s_DOC_BORDER = "<--------------------------------------------->";
+const char* const ConsoleDocumentEditor::s_APP_BORDER = "###############################################\n";
+const char* const ConsoleDocumentEditor::s_DOC_BORDER = "<--------------------------------------------->\n";
 
 ConsoleDocumentEditor::ConsoleDocumentEditor
 (
@@ -24,7 +24,12 @@ ConsoleDocumentEditor::ConsoleDocumentEditor
 	output_(output),
 	input_(input)
 {
+}
+
+int ConsoleDocumentEditor::execute() const noexcept
+{
 	main_loop();
+	return 0;
 }
 
 auto ConsoleDocumentEditor::print_help(const iterable& params) const -> void
