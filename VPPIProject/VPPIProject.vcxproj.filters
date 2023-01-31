@@ -14,6 +14,7 @@
     <ClCompile Include="TextHeader.cpp">
       <Filter>Product\Headers</Filter>
     </ClCompile>
+    <ClCompile Include="ConsoleDocumentEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Unneeded.h" />
@@ -40,6 +41,11 @@
     </ClInclude>
     <ClInclude Include="TextHeader.h">
       <Filter>Product\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleDocumentEditor.h" />
+    <ClInclude Include="Utilities.h" />
+    <ClInclude Include="CommandException.h">
+      <Filter>Exceptions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
