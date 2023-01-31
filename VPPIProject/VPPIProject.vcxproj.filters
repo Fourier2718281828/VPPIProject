@@ -48,6 +48,12 @@
       <Filter>Exceptions</Filter>
     </ClInclude>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="IFactories.h">
+      <Filter>Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="ConcreteFactories.h">
+      <Filter>Factories</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Notes">
@@ -64,6 +70,9 @@
     </Filter>
     <Filter Include="Exceptions">
       <UniqueIdentifier>{bdb2e995-2429-4e8b-a22e-4fef40a59fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Factories">
+      <UniqueIdentifier>{a62efe4e-97ac-48b1-b6a2-1a9202cd6853}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

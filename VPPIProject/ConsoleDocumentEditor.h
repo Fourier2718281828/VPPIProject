@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "IHeader.h"
 #include "IDocument.h"
+#include "IFactories.h"
 #include <memory>
 #include <iostream>
 #include <map>
@@ -12,6 +13,7 @@
 class ConsoleDocumentEditor : public Application
 {
 private:
+	using factory_type = IDocHeaderFactory;
 	using in_text_type = std::string;
 	using iterable = std::vector<in_text_type>;
 	using command = std::function<void(const iterable&)>;
@@ -27,7 +29,7 @@ public:
 	ConsoleDocumentEditor& operator=(const ConsoleDocumentEditor&) = delete;
 public:
 	void print_help(const iterable&) const;
-	void command2(const iterable&) const;
+	void new_document(const iterable&) const;
 	void command3(const iterable&) const;
 	void command4(const iterable&) const;
 private:
@@ -38,11 +40,14 @@ private:
 	const command_map commands_;
 	std::ostream& output_;
 	std::istream& input_;
-	ptr<IHeader> header_;
+	ptr<IHeader> current_header_;
 	ptr<IDocument> current_document_;
+	ptr<factory_type> doc_creator_;
 private:
 	static const char* const s_APP_BORDER;
 	static const char* const s_DOC_BORDER;
+	static const char* const s_DEFAULT_FILENAME;
+	static std::map<in_text_type, ptr<factory_type>> s_DOCUMENT_TYPES_TO_FACTORIES;
 };
 
 #endif // !CONSOLE_DOC_EDITOR_
