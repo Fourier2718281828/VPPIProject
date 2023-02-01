@@ -37,12 +37,12 @@ auto MathTextDocument::check_for_correctness(const text_type& txt) const noexcep
     return true;
 }
 
-auto create_document() noexcept -> ISerializer::ptr<ISerializable>
+auto create_document_math() noexcept -> ISerializer::ptr<ISerializable>
 {
     return std::make_unique<MathTextDocument>();
 }
 
 auto MathTextDocument::register_for_serialization(DocumentSerializer& ser) -> void
 {
-    ser.register_product(s_TYPE, &create_document);
+    ser.register_product(s_TYPE, &create_document_math);
 }
