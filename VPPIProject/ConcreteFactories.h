@@ -58,27 +58,27 @@ using MathTextFactory = ConcreteFactory
 	ConcreteFactoryUnit
 >;
 
-#include "ConsoleDocumentEditor.h"
-namespace
-{
+//#include "ConsoleDocumentEditor.h"
+//namespace
+//{
+//
+//	class FactoryRegistrator
+//	{
+//	private:
+//		static const bool PLAIN_TEXT_FACTORY;
+//		static const bool MATH_TEXT_FACTORY;
+//	};
 
-	class FactoryRegistrator
-	{
-	private:
-		static const bool PLAIN_TEXT_FACTORY;
-		static const bool MATH_TEXT_FACTORY;
-	};
-
-//#define PROTOTYPE_BASED_FACTORIES
-#ifndef PROTOTYPE_BASED_FACTORIES
-	const bool FactoryRegistrator::PLAIN_TEXT_FACTORY =
-		ConsoleDocumentEditor::get_instance().register_factory<PlainTextFactory>(DocumentType::PLAIN_TEXT);
-	const bool FactoryRegistrator::MATH_TEXT_FACTORY =
-		ConsoleDocumentEditor::get_instance().register_factory<MathTextFactory>(DocumentType::MATH_TEXT);
-#else
-
-#endif // !PROTOTYPE_BASED_FACTORIES
-}
+////#define PROTOTYPE_BASED_FACTORIES
+//#ifndef PROTOTYPE_BASED_FACTORIES
+//	const bool FactoryRegistrator::PLAIN_TEXT_FACTORY =
+//		ConsoleDocumentEditor::get_instance().register_factory<PlainTextFactory>(IDocument::Type::PLAIN_TEXT);
+//	const bool FactoryRegistrator::MATH_TEXT_FACTORY =
+//		ConsoleDocumentEditor::get_instance().register_factory<MathTextFactory>(IDocument::Type::MATH_TEXT);
+//#else
+//
+//#endif // !PROTOTYPE_BASED_FACTORIES
+//}
 
 
 #endif // !CONCRETE_FACTORIES_

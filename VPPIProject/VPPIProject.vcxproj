@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleDocumentEditor.cpp" />
+    <ClCompile Include="DocumentSerializer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathTextDocument.cpp" />
     <ClCompile Include="MathTextHeader.cpp" />
@@ -154,7 +155,10 @@
     <ClInclude Include="ConcreteFactories.h" />
     <ClInclude Include="ConsoleDocumentEditor.h" />
     <ClInclude Include="BadDocumentException.h" />
+    <ClInclude Include="DeserializeException.h" />
+    <ClInclude Include="DocumentSerializer.h" />
     <ClInclude Include="ISerializable.h" />
+    <ClInclude Include="ISerializer.h" />
     <ClInclude Include="MathTextHeader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="IDocument.h" />

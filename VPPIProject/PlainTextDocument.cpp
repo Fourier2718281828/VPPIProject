@@ -21,8 +21,18 @@ auto PlainTextDocument::serialize(std::ofstream& os) const -> void
     os.write(text_.c_str(), text_.size());
 }
 
-auto PlainTextDocument::deserialize(std::ifstream& is) -> ptr<ISerializable>
+auto PlainTextDocument::deserialize(std::ifstream& is) -> void
 {
     text_.clear();
     is.read(text_.data(), text_.size());
+}
+
+auto create_document() noexcept -> ISerializer::ptr<ISerializable>
+{
+    return std::make_unique<PlainTextDocument>();
+}
+
+auto PlainTextDocument::register_for_serialization(DocumentSerializer& ser) -> void
+{
+    ser.register_product(s_TYPE, &create_document);
 }

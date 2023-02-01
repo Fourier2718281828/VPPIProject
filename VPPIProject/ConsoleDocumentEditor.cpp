@@ -18,9 +18,14 @@ const char* const ConsoleDocumentEditor::s_APP_BORDER		= "######################
 const char* const ConsoleDocumentEditor::s_DOC_TOP_BORDER	= "\n/---------------------------------------------\\\n";
 const char* const ConsoleDocumentEditor::s_DOC_MID_BORDER	= "|---------------------------------------------|\n";
 const char* const ConsoleDocumentEditor::s_DOC_BOT_BORDER	= "\\---------------------------------------------/\n\n";
-const char* const ConsoleDocumentEditor::s_DEFAULT_FILENAME = "Document";
+const char* const ConsoleDocumentEditor::s_FILE_DIR = "files\\";
 
-ConsoleDocumentEditor::ConsoleDocumentEditor() :
+ConsoleDocumentEditor::ConsoleDocumentEditor
+(
+	std::ostream& output, 
+	std::istream& input, 
+	ISerializer& serializer
+) :
 	doctypes_to_factories_{},
 	commands_
 	(
@@ -32,8 +37,9 @@ ConsoleDocumentEditor::ConsoleDocumentEditor() :
 			{"show_current", ATTACH_METHOD(show_current)},
 		}
 	),
-	output_(std::cout),
-	input_(std::cin),
+	output_(output),
+	input_(input),
+	serializer_(serializer),
 	current_header_(nullptr),
 	current_document_(nullptr),
 	doc_creator_(nullptr)
@@ -57,20 +63,19 @@ auto ConsoleDocumentEditor::print_help(const iterable& params) const -> void
 
 auto ConsoleDocumentEditor::new_document(const iterable& params) -> void
 {
-	if (auto s = params.size(); s > 2 || s == 0)
-		throw CommandException("***Invalid number of params");
-	text_type doc_name = params.size() > 1
-		? params[1]
-		: s_DEFAULT_FILENAME;
-	//IDocHeaderFactory& f = *s_DOCUMENT_TYPES_TO_FACTORIES.at(params[0]);
-	
+	command_params_check(1, params.size());
+	auto factory = get_factory(params[0]);
+	set_document(factory);	
 }
 
 auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 {
-	command_params_check(1, params.size());
-	auto factory = get_factory(params[0]);
-	set_document(factory);
+	/*if (auto s = params.size(); s > 2 || s == 0)
+		throw CommandException("***Invalid number of params");
+	text_type doc_name = params.size() > 1
+		? params[1]
+		: s_DEFAULT_FILENAME;*/
+		//IDocHeaderFactory& f = *s_DOCUMENT_TYPES_TO_FACTORIES.at(params[0]);
 }
 
 auto ConsoleDocumentEditor::close_document(const iterable& params) -> void
@@ -91,6 +96,12 @@ auto ConsoleDocumentEditor::show_current(const iterable& params) const -> void
 	if (current_document_ == nullptr)
 		throw CommandException("***No document open.");
 	show_document(*current_document_, *current_header_);
+}
+
+auto ConsoleDocumentEditor::save(const iterable& params) const -> void
+{
+	command_params_check(1u, params.size());
+	std::ofstream out(std::string(s_FILE_DIR) + params[0]);
 }
 
 auto ConsoleDocumentEditor::main_loop() const noexcept -> void
@@ -199,13 +210,13 @@ auto ConsoleDocumentEditor::set_document(ptr<factory_type> factory) noexcept -> 
 	show_document(*current_document_, *current_header_);
 }
 
-auto ConsoleDocumentEditor::doctype_to_string(const DocumentType doc) -> text_type
+auto ConsoleDocumentEditor::doctype_to_string(const IDocument::Type doc) -> text_type
 {
 	switch (doc)
 	{
-	case DocumentType::PLAIN_TEXT:
+	case IDocument::Type::PLAIN_TEXT:
 		return "plain_text";
-	case DocumentType::MATH_TEXT:
+	case IDocument::Type::MATH_TEXT:
 		return "math_text";
 	default:
 		throw InvalidCastException("***No such a document type.");

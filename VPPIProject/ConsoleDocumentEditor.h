@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "IHeader.h"
 #include "IDocument.h"
+#include "ISerializer.h"
 #include "IFactories.h"
 #include "Singleton.h"
 #include <memory>
@@ -13,8 +14,8 @@
 #include <concepts>
 
 class ConsoleDocumentEditor : 
-	public Application, 
-	public Singleton<ConsoleDocumentEditor>
+	public Application 
+	//public Singleton<ConsoleDocumentEditor>
 {
 private:
 	template<typename T>
@@ -28,13 +29,13 @@ public:
 	static_assert(std::is_same_v<text_type, IHeader::text_type>, 
 		"Text types must match.");
 public:
-	ConsoleDocumentEditor();
+	ConsoleDocumentEditor(std::ostream&, std::istream&, ISerializer&);
 	~ConsoleDocumentEditor() override = default;
 	int execute() const noexcept override;
 public:
 	template<typename FactoryType>
 		requires std::is_default_constructible_v<FactoryType>
-	bool register_factory(const DocumentType);
+	bool register_factory(const IDocument::Type);
 public:
 	ConsoleDocumentEditor(const ConsoleDocumentEditor&) = delete;
 	ConsoleDocumentEditor& operator=(const ConsoleDocumentEditor&) = delete;
@@ -44,6 +45,7 @@ public:
 	void open_document(const iterable&);
 	void close_document(const iterable&);
 	void show_current(const iterable&) const;
+	void save(const iterable&) const;
 private:
 	void main_loop() const noexcept;
 	const std::pair<text_type, iterable> parse_user_command(const text_type&) const noexcept;
@@ -51,12 +53,13 @@ private:
 	void command_params_check(const unsigned short, const unsigned short) const;
 	void show_document(const IDocument&, const IHeader&) const noexcept;
 	void set_document(ptr<factory_type>) noexcept;
-	static text_type doctype_to_string(const DocumentType);
+	static text_type doctype_to_string(const IDocument::Type);
 private:
 	std::map<text_type, ptr<factory_type>> doctypes_to_factories_;
 	command_map commands_;
 	std::ostream& output_;
 	std::istream& input_;
+	ISerializer& serializer_;
 	ptr<IHeader> current_header_;
 	ptr<IDocument> current_document_;
 	ptr<factory_type> doc_creator_;
@@ -66,11 +69,12 @@ private:
 	static const char* const s_DOC_MID_BORDER;
 	static const char* const s_DOC_BOT_BORDER;
 	static const char* const s_DEFAULT_FILENAME;
+	static const char* const s_FILE_DIR;
 };
 
 template<typename FactoryType>
 	requires std::is_default_constructible_v<FactoryType>
-inline bool ConsoleDocumentEditor::register_factory(const DocumentType doc_type)
+inline bool ConsoleDocumentEditor::register_factory(const IDocument::Type doc_type)
 {
 	auto param_name = doctype_to_string(doc_type);
 	if (doctypes_to_factories_.contains(param_name))

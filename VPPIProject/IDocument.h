@@ -3,14 +3,14 @@
 #include <string>
 #include "ISerializable.h"
 
-enum class DocumentType
-{
-	PLAIN_TEXT,
-	MATH_TEXT,
-};
-
 class IDocument : public ISerializable
 {
+public:
+	enum class Type
+	{
+		PLAIN_TEXT,
+		MATH_TEXT,
+	};
 public:
 	using text_type = std::string;
 public:

@@ -12,7 +12,7 @@ public:
 	virtual ~ISerializable() = default;
 public:
 	virtual void serialize(std::ofstream&) const = 0;
-	virtual ptr<ISerializable> deserialize(std::ifstream&) = 0;
+	virtual void deserialize(std::ifstream&) = 0;
 };
 
 #endif // !ISERIALIZABLE_
