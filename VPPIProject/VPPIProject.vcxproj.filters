@@ -15,7 +15,9 @@
     <ClCompile Include="MathTextHeader.cpp">
       <Filter>Product\Headers</Filter>
     </ClCompile>
-    <ClCompile Include="DocumentSerializer.cpp" />
+    <ClCompile Include="DocumentSerializer.cpp">
+      <Filter>Serialization</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Unneeded.h" />
@@ -62,9 +64,11 @@
     <ClInclude Include="ISerializer.h">
       <Filter>Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="DocumentSerializer.h" />
     <ClInclude Include="DeserializeException.h">
       <Filter>Exceptions</Filter>
+    </ClInclude>
+    <ClInclude Include="DocumentSerializer.h">
+      <Filter>Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

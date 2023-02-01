@@ -12,11 +12,12 @@ public:
 public:
 	void serialize(std::ofstream&) const override;
 	void deserialize(std::ifstream&) override;
+	Type type() const noexcept override;
 	static void register_for_serialization(DocumentSerializer&);
 private:
 	text_type text_;
 private:
-	static constexpr const Type s_TYPE = Type::MATH_TEXT;
+	static constexpr const Type s_TYPE = Type::PLAIN_TEXT;
 };
 
 

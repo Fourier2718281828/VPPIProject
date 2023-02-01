@@ -19,6 +19,7 @@ const char* const ConsoleDocumentEditor::s_DOC_TOP_BORDER	= "\n/----------------
 const char* const ConsoleDocumentEditor::s_DOC_MID_BORDER	= "|---------------------------------------------|\n";
 const char* const ConsoleDocumentEditor::s_DOC_BOT_BORDER	= "\\---------------------------------------------/\n\n";
 const char* const ConsoleDocumentEditor::s_FILE_DIR = "files\\";
+const char* const ConsoleDocumentEditor::s_FILE_TYPE = ".txt";
 
 ConsoleDocumentEditor::ConsoleDocumentEditor
 (
@@ -35,6 +36,7 @@ ConsoleDocumentEditor::ConsoleDocumentEditor
 			{"open_document", ATTACH_METHOD(open_document)},
 			{"close_document", ATTACH_METHOD(close_document)},
 			{"show_current", ATTACH_METHOD(show_current)},
+			{"save", ATTACH_METHOD(save)},
 		}
 	),
 	output_(output),
@@ -65,17 +67,28 @@ auto ConsoleDocumentEditor::new_document(const iterable& params) -> void
 {
 	command_params_check(1, params.size());
 	auto factory = get_factory(params[0]);
-	set_document(factory);	
+	set_document(factory);
+	show_document(*current_document_, *current_header_);
 }
 
 auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 {
-	/*if (auto s = params.size(); s > 2 || s == 0)
-		throw CommandException("***Invalid number of params");
-	text_type doc_name = params.size() > 1
-		? params[1]
-		: s_DEFAULT_FILENAME;*/
-		//IDocHeaderFactory& f = *s_DOCUMENT_TYPES_TO_FACTORIES.at(params[0]);
+	command_params_check(1u, params.size());
+	auto filename = s_FILE_DIR + params[0] + s_FILE_TYPE;
+	std::ifstream istrm(filename);
+	if (!istrm.is_open())
+		throw DecerializeException("***No such a file.");
+	else
+	{
+		if(current_document_) close_document({});
+		decltype(auto) deserialized = serializer_.deserialize(istrm);
+		auto document = cast_to<IDocument>(std::move(deserialized));
+		auto type = doctype_to_string(document->type());
+		auto factory = get_factory(type);
+		set_document(factory);
+		current_document_ = std::move(document);
+		show_document(*current_document_, *current_header_);
+	}
 }
 
 auto ConsoleDocumentEditor::close_document(const iterable& params) -> void
@@ -101,7 +114,10 @@ auto ConsoleDocumentEditor::show_current(const iterable& params) const -> void
 auto ConsoleDocumentEditor::save(const iterable& params) const -> void
 {
 	command_params_check(1u, params.size());
-	std::ofstream out(std::string(s_FILE_DIR) + params[0]);
+	if (current_document_ == nullptr)
+		throw CommandException("***No document open.");
+	std::ofstream out(s_FILE_DIR + params[0] + s_FILE_TYPE);
+	serializer_.serialize(out, *current_document_);
 }
 
 auto ConsoleDocumentEditor::main_loop() const noexcept -> void
@@ -182,7 +198,8 @@ auto ConsoleDocumentEditor::show_document(const IDocument& document, const IHead
 	}
 	print(s_DOC_MID_BORDER);
 	{
-		print(document.get_text() + '\n');
+		print(document.get_text());
+		print(std::string("\n"));
 	}
 	print(s_DOC_BOT_BORDER);
 }
@@ -206,8 +223,6 @@ auto ConsoleDocumentEditor::set_document(ptr<factory_type> factory) noexcept -> 
 		commands_[name] = [&_curr_doc, command](const iterable& txt) 
 		{ return command(_curr_doc, txt); };
 	}
-
-	show_document(*current_document_, *current_header_);
 }
 
 auto ConsoleDocumentEditor::doctype_to_string(const IDocument::Type doc) -> text_type

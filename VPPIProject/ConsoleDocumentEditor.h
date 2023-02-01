@@ -70,6 +70,7 @@ private:
 	static const char* const s_DOC_BOT_BORDER;
 	static const char* const s_DEFAULT_FILENAME;
 	static const char* const s_FILE_DIR;
+	static const char* const s_FILE_TYPE;
 };
 
 template<typename FactoryType>

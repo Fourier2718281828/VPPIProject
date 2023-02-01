@@ -12,6 +12,7 @@ public:
 public:
 	void serialize(std::ofstream&) const override;
 	void deserialize(std::ifstream&) override;
+	Type type() const noexcept override;
 	static void register_for_serialization(DocumentSerializer&);
 private:
 	bool check_for_correctness(const text_type&) const noexcept;

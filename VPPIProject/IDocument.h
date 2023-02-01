@@ -19,6 +19,7 @@ public:
 	virtual const text_type& get_text() const noexcept = 0;
 	virtual void append_text(const text_type&) = 0;
 	virtual void clear() noexcept = 0;
+	virtual Type type() const noexcept = 0;
 };
 
 #endif // !IDOCUMENT_

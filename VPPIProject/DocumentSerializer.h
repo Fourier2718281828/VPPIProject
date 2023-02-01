@@ -8,7 +8,8 @@
 template
 <
 	typename IdentifierType, 
-	typename ProductCreator = std::function<ISerializer::ptr<ISerializable>(void)>
+	typename ProductCreator 
+	= std::function<ISerializer::ptr<ISerializable>(std::ifstream&)>
 >
 class ConcreteSerializer : public ISerializer
 {
@@ -19,7 +20,7 @@ public:
 
 	bool register_product(const IdentifierType& id, ProductCreator creator)
 	{
-		return associations_.insert(AssocMap::value_type(id, creator)).second;
+		return associations_.insert({ id, creator }).second;
 	}
 
 	bool unregister_product(const IdentifierType& id) const
@@ -41,7 +42,7 @@ public:
 
 		if (i != associations_.end())
 		{
-			return (i->second)();
+			return (i->second)(fs);
 		}
 
 		throw DecerializeException("Unknown Type");

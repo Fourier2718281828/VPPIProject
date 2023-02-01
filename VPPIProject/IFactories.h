@@ -45,43 +45,7 @@ public:
 };
 
 using IDocHeaderFactory = IFactory<IFactoryUnit, LOKI_TYPELIST_2(IDocument, IHeader)>;
-
-
-
-
-
-
-
-
-
-
-
-
-
-//template <class AbstractProduct>
-//class MyAbstractFactoryUnit
-//{
-//public:
-//	virtual ~MyAbstractFactoryUnit() = default;
-//private:
-//	virtual AbstractProduct* DoCreate(Loki::Type2Type<AbstractProduct>) const = 0;
-//};
-
-//// interface of generalized abstract factory
-//template
-//<
-//	class TList,
-//	template <class> class Unit = MyAbstractFactoryUnit
-//>
-//class MyAbstractFactory : public GenScatterHierarchy<TList, Unit>
-//{
-//public:
-//	using ProductList = TList;
-//	template <class T> T* Create()
-//	{
-//		Unit<T>& unit = *this;
-//		return unit.DoCreate(Type2Type<T>());
-//	}
-//};
+using IDocFactory = IFactory<IFactoryUnit, LOKI_TYPELIST_1(IDocument)>;
+using IHeaderFactory = IFactory<IFactoryUnit, LOKI_TYPELIST_1(IHeader)>;
 
 #endif // !TEXT_EDITOR_FACTORY
