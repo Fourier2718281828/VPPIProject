@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <memory>
 #include <iostream>
+#include <cassert>
 
 #define ATTACH_METHOD(method_name) \
 std::bind(&ConsoleDocumentEditor::method_name, this, std::placeholders::_1)
@@ -75,6 +76,11 @@ auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 auto ConsoleDocumentEditor::close_document(const iterable& params) -> void
 {
 	command_params_check(0u, params.size());
+	for (auto&& [name, _] : current_header_->get_commands())
+	{
+		assert(commands_.contains(name));
+		commands_.erase(name);
+	}
 	current_document_ = nullptr;
 	current_header_ = nullptr;
 }
@@ -105,13 +111,13 @@ auto ConsoleDocumentEditor::main_loop() const noexcept -> void
 		{
 			commands_.at(first).operator()(params);
 		}
-		catch (const CommandException& ex)
-		{
-			output_ << ex.what() << '\n';
-		}
 		catch (const std::out_of_range&)
 		{
 			output_ << "***No such a command.\n";
+		}
+		catch (const std::exception& ex)
+		{
+			output_ << ex.what() << '\n';
 		}
 	} while (true);
 	output_ << "Have a nice day!\n";
@@ -161,6 +167,7 @@ auto ConsoleDocumentEditor::show_document(const IDocument& document, const IHead
 	print(s_DOC_TOP_BORDER);
 	{
 		print(header.get_title() + '\n');
+		print_help({});
 	}
 	print(s_DOC_MID_BORDER);
 	{
@@ -171,12 +178,25 @@ auto ConsoleDocumentEditor::show_document(const IDocument& document, const IHead
 
 auto ConsoleDocumentEditor::set_document(ptr<factory_type> factory) noexcept -> void
 {
-	using std::move;
 	decltype(auto) header = factory->Create<IHeader>();
 	decltype(auto) document = factory->Create<IDocument>();
-	show_document(*document, *header);
+
+	using std::move;
 	current_document_ = move(document);
 	current_header_ = move(header);
+	
+	using namespace std::placeholders;
+	auto header_commands = current_header_->get_commands();
+	IDocument& _curr_doc = *current_document_;
+
+	for (auto&& [name, command] : header_commands)
+	{
+		assert(!commands_.contains(name));
+		commands_[name] = [&_curr_doc, command](const iterable& txt) 
+		{ return command(_curr_doc, txt); };
+	}
+
+	show_document(*current_document_, *current_header_);
 }
 
 auto ConsoleDocumentEditor::doctype_to_string(const DocumentType doc) -> text_type

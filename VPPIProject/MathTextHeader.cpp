@@ -30,10 +30,10 @@ auto MathTextHeader::insert_formula(IDocument& document, const iterable& params)
         throw CommandException("***Invalid number of params");
     using std::regex;
     using std::regex_match;
-    regex formula("^([-+/*]\d+(\.\d+)?)*=^([-+/*]\d+(\.\d+)?)*");
+    regex formula("^[-+]?[0-9]*\.?[0-9]+([-+*/]?([0-9]*\.?[0-9]+))*$");
 
     if (regex_match(params[0], formula))
-        document.append_text(params[0]);
+        document.append_text(params[0] + ";\n");
     else 
         throw CommandException("***Input must be a formula");
 }

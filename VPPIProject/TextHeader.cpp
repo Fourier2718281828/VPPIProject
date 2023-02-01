@@ -29,9 +29,12 @@ auto TextHeader::insert_text
 	const iterable& params
 ) const -> void
 {
-	if (params.size() != 1)
+	if (params.size() == 0)
 		throw CommandException("***Invalid number of params");
-	document.append_text(params[0]);
+	for (auto&& word : params)
+	{
+		document.append_text(word + ' ');
+	}
 }
 
 auto TextHeader::clear

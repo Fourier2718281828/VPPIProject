@@ -54,7 +54,7 @@ private:
 	static text_type doctype_to_string(const DocumentType);
 private:
 	std::map<text_type, ptr<factory_type>> doctypes_to_factories_;
-	const command_map commands_;
+	command_map commands_;
 	std::ostream& output_;
 	std::istream& input_;
 	ptr<IHeader> current_header_;

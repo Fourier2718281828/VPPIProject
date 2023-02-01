@@ -21,13 +21,6 @@ auto MathTextDocument::clear() noexcept -> void
 
 auto MathTextDocument::check_for_correctness(const text_type& txt) const noexcept -> bool
 {
-    static const text_type ALLOWED_CHARS = "xy+-*/0123456789";
-    auto is_bad = [](const text_type::value_type ch) 
-    { return ALLOWED_CHARS.find(ch) != ALLOWED_CHARS.size(); };
-
-    for (const auto ch : txt)
-    {
-        if (is_bad(ch)) return false;
-    }
+    //some math logic...
     return true;
 }
