@@ -154,6 +154,7 @@
     <ClInclude Include="ConcreteFactories.h" />
     <ClInclude Include="ConsoleDocumentEditor.h" />
     <ClInclude Include="BadDocumentException.h" />
+    <ClInclude Include="ISerializable.h" />
     <ClInclude Include="MathTextHeader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="IDocument.h" />

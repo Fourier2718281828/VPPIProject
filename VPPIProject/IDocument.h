@@ -1,6 +1,7 @@
 #ifndef IDOCUMENT_
 #define IDOCUMENT_
 #include <string>
+#include "ISerializable.h"
 
 enum class DocumentType
 {
@@ -8,7 +9,7 @@ enum class DocumentType
 	MATH_TEXT,
 };
 
-class IDocument
+class IDocument : public ISerializable
 {
 public:
 	using text_type = std::string;

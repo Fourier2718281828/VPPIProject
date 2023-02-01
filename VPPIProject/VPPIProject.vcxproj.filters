@@ -55,6 +55,9 @@
     <ClInclude Include="MathTextHeader.h">
       <Filter>Product\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="ISerializable.h">
+      <Filter>Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Product">
@@ -71,6 +74,9 @@
     </Filter>
     <Filter Include="Factories">
       <UniqueIdentifier>{a62efe4e-97ac-48b1-b6a2-1a9202cd6853}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Serialization">
+      <UniqueIdentifier>{944bef0f-0baa-4863-83ef-d60f68d26e22}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

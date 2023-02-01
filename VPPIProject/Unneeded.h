@@ -80,8 +80,3 @@ private:
     typedef AssocVector<TypeInfo, ProductCreator> IdToProductMap;
     IdToProductMap associations_;
 };
-
-#define HALF_NOTE 1.059463094359 // HALF_NOTE ^ 12 = 2
-
-#include <Windows.h>
-#include <math.h>

@@ -19,6 +19,18 @@ auto MathTextDocument::clear() noexcept -> void
     text_.clear();
 }
 
+auto MathTextDocument::serialize(std::ofstream& os) const -> void
+{
+    os.write(reinterpret_cast<const char*>(&s_TYPE), sizeof s_TYPE);
+    os.write(text_.c_str(), text_.size());
+}
+
+auto MathTextDocument::deserialize(std::ifstream& is) -> ptr<ISerializable>
+{
+    text_.clear();
+    is.read(text_.data(), text_.size());
+}
+
 auto MathTextDocument::check_for_correctness(const text_type& txt) const noexcept -> bool
 {
     //some math logic...
