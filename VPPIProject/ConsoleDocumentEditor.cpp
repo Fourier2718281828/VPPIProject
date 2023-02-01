@@ -14,8 +14,9 @@ std::bind(&ConsoleDocumentEditor::method_name, this, std::placeholders::_1)
 std::make_shared<factory_type>()
 
 const char* const ConsoleDocumentEditor::s_APP_BORDER		= "###############################################\n";
-const char* const ConsoleDocumentEditor::s_DOC_BORDER		= ">---------------------------------------------<\n";
-const char* const ConsoleDocumentEditor::s_DOC_IN_BORDER	= "<--------------------------------------------->\n";
+const char* const ConsoleDocumentEditor::s_DOC_TOP_BORDER	= "\n/---------------------------------------------\\\n";
+const char* const ConsoleDocumentEditor::s_DOC_MID_BORDER	= "|---------------------------------------------|\n";
+const char* const ConsoleDocumentEditor::s_DOC_BOT_BORDER	= "\\---------------------------------------------/\n\n";
 const char* const ConsoleDocumentEditor::s_DEFAULT_FILENAME = "Document";
 
 ConsoleDocumentEditor::ConsoleDocumentEditor() :
@@ -26,6 +27,8 @@ ConsoleDocumentEditor::ConsoleDocumentEditor() :
 			{"?", ATTACH_METHOD(print_help)},
 			{"new_document", ATTACH_METHOD(new_document)},
 			{"open_document", ATTACH_METHOD(open_document)},
+			{"close_document", ATTACH_METHOD(close_document)},
+			{"show_current", ATTACH_METHOD(show_current)},
 		}
 	),
 	output_(std::cout),
@@ -66,7 +69,22 @@ auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 {
 	command_params_check(1, params.size());
 	auto factory = get_factory(params[0]);
-	show_document(factory);
+	set_document(factory);
+}
+
+auto ConsoleDocumentEditor::close_document(const iterable& params) -> void
+{
+	command_params_check(0u, params.size());
+	current_document_ = nullptr;
+	current_header_ = nullptr;
+}
+
+auto ConsoleDocumentEditor::show_current(const iterable& params) const -> void
+{
+	command_params_check(0u, params.size());
+	if (current_document_ == nullptr)
+		throw CommandException("***No document open.");
+	show_document(*current_document_, *current_header_);
 }
 
 auto ConsoleDocumentEditor::main_loop() const noexcept -> void
@@ -79,8 +97,9 @@ auto ConsoleDocumentEditor::main_loop() const noexcept -> void
 	output_ << "Awaiting your command...\n";
 	do
 	{
-		output_ << '>';
+		output_ << '>' << ' ';
 		std::getline(input_, in_txt);
+		if (in_txt.empty()) continue;
 		auto [first, params] = parse_user_command(in_txt);
 		try
 		{
@@ -128,29 +147,36 @@ auto ConsoleDocumentEditor::command_params_check
 	const unsigned short actual_num_of_args
 ) const -> void
 {
-	if (needed_num_of_args != actual_num_of_args)
-		throw CommandException("***Invalid number of params");
+	if (needed_num_of_args == actual_num_of_args) return;
+	auto msg = std::string("***Invalid number of params. Expected: ") +
+		std::to_string(needed_num_of_args);
+	throw CommandException(msg.c_str());
 }
 
-auto ConsoleDocumentEditor::show_document(ptr<factory_type> factory) noexcept -> void
+auto ConsoleDocumentEditor::show_document(const IDocument& document, const IHeader& header) const noexcept -> void
 {
-	decltype(auto) header = factory->Create<IHeader>();
-	decltype(auto) document = factory->Create<IDocument>();
 	auto& output = output_;
 	auto print = [&output](const text_type& txt) { output << txt; };
 
-	print(s_DOC_BORDER);
+	print(s_DOC_TOP_BORDER);
 	{
-		print(header->get_title() + '\n');
+		print(header.get_title() + '\n');
 	}
-	print(s_DOC_IN_BORDER);
+	print(s_DOC_MID_BORDER);
 	{
-		print(document->get_text() + '\n');
+		print(document.get_text() + '\n');
 	}
-	print(s_DOC_BORDER);
+	print(s_DOC_BOT_BORDER);
+}
 
-	current_document_ = std::move(document);
-	current_header_ = std::move(header);
+auto ConsoleDocumentEditor::set_document(ptr<factory_type> factory) noexcept -> void
+{
+	using std::move;
+	decltype(auto) header = factory->Create<IHeader>();
+	decltype(auto) document = factory->Create<IDocument>();
+	show_document(*document, *header);
+	current_document_ = move(document);
+	current_header_ = move(header);
 }
 
 auto ConsoleDocumentEditor::doctype_to_string(const DocumentType doc) -> text_type

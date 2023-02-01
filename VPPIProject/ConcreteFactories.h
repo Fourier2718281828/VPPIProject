@@ -5,6 +5,7 @@
 #include "loki/Sequence.h"
 #include "PlainTextDocument.h"
 #include "MathTextDocument.h"
+#include "MathTextHeader.h"
 #include "TextHeader.h"
 
 template <class ConcreteProduct, class Base>
@@ -53,7 +54,7 @@ using PlainTextFactory = ConcreteFactory
 using MathTextFactory = ConcreteFactory
 <
 	IDocHeaderFactory,
-	LOKI_TYPELIST_2(MathTextDocument, TextHeader),
+	LOKI_TYPELIST_2(MathTextDocument, MathTextHeader),
 	ConcreteFactoryUnit
 >;
 

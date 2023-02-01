@@ -16,7 +16,7 @@ MathTextHeader::MathTextHeader() :
 
 auto MathTextHeader::get_title() const noexcept -> const caption_txt_type
 {
-    return "Math Document Editor:";
+    return "\tMath Document Editor:";
 }
 
 auto MathTextHeader::get_commands() const noexcept -> const command_map&

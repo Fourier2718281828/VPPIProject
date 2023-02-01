@@ -15,7 +15,7 @@ TextHeader::TextHeader() :
 
 auto TextHeader::get_title() const noexcept -> const caption_txt_type
 {
-	return "Text Document Editor:";
+	return "\tText Document Editor:";
 }
 
 auto TextHeader::get_commands() const noexcept -> const command_map&

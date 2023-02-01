@@ -43,12 +43,14 @@ public:
 	void new_document(const iterable&);
 	void open_document(const iterable&);
 	void close_document(const iterable&);
+	void show_current(const iterable&) const;
 private:
 	void main_loop() const noexcept;
 	const std::pair<text_type, iterable> parse_user_command(const text_type&) const noexcept;
 	ptr<factory_type> get_factory(const text_type&) const;
 	void command_params_check(const unsigned short, const unsigned short) const;
-	void show_document(ptr<factory_type>) noexcept;
+	void show_document(const IDocument&, const IHeader&) const noexcept;
+	void set_document(ptr<factory_type>) noexcept;
 	static text_type doctype_to_string(const DocumentType);
 private:
 	std::map<text_type, ptr<factory_type>> doctypes_to_factories_;
@@ -60,8 +62,9 @@ private:
 	ptr<factory_type> doc_creator_;
 private:
 	static const char* const s_APP_BORDER;
-	static const char* const s_DOC_BORDER;
-	static const char* const s_DOC_IN_BORDER;
+	static const char* const s_DOC_TOP_BORDER;
+	static const char* const s_DOC_MID_BORDER;
+	static const char* const s_DOC_BOT_BORDER;
 	static const char* const s_DEFAULT_FILENAME;
 };
 
