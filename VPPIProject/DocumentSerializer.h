@@ -35,7 +35,6 @@ public:
 
 	ptr<ISerializable> deserialize(std::ifstream& fs) override
 	{
-		//fs.read(reinterpret_cast<char*>(&id), sizeof IdentifierType);
 		int buf;
 		fs >> buf;
 

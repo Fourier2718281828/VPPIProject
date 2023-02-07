@@ -32,10 +32,10 @@ ConsoleDocumentEditor::ConsoleDocumentEditor
 	(
 		{
 			{"?", ATTACH_METHOD(print_help)},
-			{"new_document", ATTACH_METHOD(new_document)},
-			{"open_document", ATTACH_METHOD(open_document)},
-			{"close_document", ATTACH_METHOD(close_document)},
-			{"show_current", ATTACH_METHOD(show_current)},
+			{"new", ATTACH_METHOD(new_document)},
+			{"open", ATTACH_METHOD(open_document)},
+			{"close", ATTACH_METHOD(close_document)},
+			{"show", ATTACH_METHOD(show_current)},
 			{"save", ATTACH_METHOD(save)},
 		}
 	),
@@ -74,6 +74,8 @@ auto ConsoleDocumentEditor::new_document(const iterable& params) -> void
 auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 {
 	command_params_check(1u, params.size());
+	if (current_document_ != nullptr)
+		throw CommandException("***First close the open one.");
 	auto filename = s_FILE_DIR + params[0] + s_FILE_TYPE;
 	std::ifstream istrm(filename);
 	if (!istrm.is_open())
@@ -94,6 +96,8 @@ auto ConsoleDocumentEditor::open_document(const iterable& params) -> void
 auto ConsoleDocumentEditor::close_document(const iterable& params) -> void
 {
 	command_params_check(0u, params.size());
+	if (current_document_ == nullptr)
+		throw CommandException("***No document open.");
 	for (auto&& [name, _] : current_header_->get_commands())
 	{
 		assert(commands_.contains(name));
@@ -142,7 +146,7 @@ auto ConsoleDocumentEditor::main_loop() const noexcept -> void
 		{
 			output_ << "***No such a command.\n";
 		}
-		catch (const std::exception& ex)
+		catch (const std::exception& ex) //sorry for that
 		{
 			output_ << ex.what() << '\n';
 		}
@@ -170,7 +174,7 @@ auto ConsoleDocumentEditor::get_factory(const text_type& param) const -> ptr<fac
 	}
 	catch (const std::out_of_range&)
 	{
-		throw CommandException("***Invalid number of params");
+		throw CommandException("***Invalid param format:\n\t<plain_text>/<math_text> expected.");
 	}
 }
 
