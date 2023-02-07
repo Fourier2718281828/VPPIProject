@@ -2,8 +2,6 @@
 Short Manual
 
 UI: simple terminal is provided to get actions done.
-![зображення](https://user-images.githubusercontent.com/75881334/217148152-0bd197bc-df96-48d6-9192-391ee917600c.png)
-
 
 Basic commands (actions):
 # <?>     - "print help", no params
