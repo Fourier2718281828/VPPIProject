@@ -35,6 +35,7 @@ auto TextHeader::insert_text
 	{
 		document.append_text(word + ' ');
 	}
+	document.append_text("\n");
 }
 
 auto TextHeader::clear

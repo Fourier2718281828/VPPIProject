@@ -6,7 +6,7 @@
 class IDocument : public ISerializable
 {
 public:
-	enum class Type
+	enum class Type : int
 	{
 		PLAIN_TEXT,
 		MATH_TEXT,

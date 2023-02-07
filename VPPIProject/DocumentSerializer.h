@@ -35,8 +35,11 @@ public:
 
 	ptr<ISerializable> deserialize(std::ifstream& fs) override
 	{
-		IdentifierType id;
-		fs.read(reinterpret_cast<char*>(&id), sizeof IdentifierType);
+		//fs.read(reinterpret_cast<char*>(&id), sizeof IdentifierType);
+		int buf;
+		fs >> buf;
+
+		IdentifierType id = static_cast<IdentifierType>(buf);
 
 		auto i = associations_.find(id);
 

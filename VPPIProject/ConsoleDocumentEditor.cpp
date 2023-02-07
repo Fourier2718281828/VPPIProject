@@ -215,13 +215,12 @@ auto ConsoleDocumentEditor::set_document(ptr<factory_type> factory) noexcept -> 
 	
 	using namespace std::placeholders;
 	auto header_commands = current_header_->get_commands();
-	IDocument& _curr_doc = *current_document_;
 
 	for (auto&& [name, command] : header_commands)
 	{
 		assert(!commands_.contains(name));
-		commands_[name] = [&_curr_doc, command](const iterable& txt) 
-		{ return command(_curr_doc, txt); };
+		commands_[name] = [this, command](const iterable& txt) 
+		{ return command(*current_document_, txt); };
 	}
 }
 

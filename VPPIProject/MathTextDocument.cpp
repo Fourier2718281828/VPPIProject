@@ -21,18 +21,18 @@ auto MathTextDocument::clear() noexcept -> void
 
 auto MathTextDocument::serialize(std::ofstream& os) const -> void
 {
-    const auto size = text_.size();
-    os.write(reinterpret_cast<const char*>(&s_TYPE), sizeof s_TYPE);
-    os.write(reinterpret_cast<const char*>(&size), sizeof size);
-    os.write(text_.c_str(), text_.size());
+    os << static_cast<int>(type()) << '\n' << text_;
 }
 
 auto MathTextDocument::deserialize(std::ifstream& is) -> void
 {
-    size_t size;
-    is.read(reinterpret_cast<char*>(&size), sizeof size_t);
-    text_.clear();
-    is.read(text_.data(), size);
+    text_type buffer;
+    while (!is.eof())
+    {
+        std::getline(is, buffer);
+        append_text(buffer + '\n');
+        buffer.clear();
+    }
 }
 
 auto MathTextDocument::type() const noexcept -> Type
